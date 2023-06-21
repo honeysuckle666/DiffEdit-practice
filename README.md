@@ -95,7 +95,7 @@ _s = lambda x: (x.shape,x.max(),x.min())
 
 但是这种方式可能会需要多次运行才能下载且连接不稳定模型较大
 
-![](C:\Users\honey\Desktop\readme\1.png)
+![](readme\1.png)
 
 
 
@@ -341,7 +341,7 @@ def diffedit_variant(im_encoded,from_prompt,to_prompt,seed=None):
 img = Image.open('./images/mario_scaled.jpg').resize((512,512));img
 ```
 
-![](C:\Users\honey\Desktop\readme\2.png)
+![](readme\2.png)
 
 ```
 encoded = image2latent(img); encoded.shape
@@ -352,7 +352,7 @@ mario_mask = generate_mask_variant(encoded,'Mario')
 plt.imshow(mario_mask.cpu().numpy(),cmap='gray')
 ```
 
-生成灰度图像![](C:\Users\honey\Desktop\readme\3.png)
+生成灰度图像![](read\3.png)
 
 显示二值化的图像比例掩码（512,512）。
 
@@ -361,7 +361,7 @@ plt.imshow(mario_mask.cpu().numpy(),cmap='gray')
 plt.imshow((mario_mask>0.5).float().cpu().numpy(),cmap='gray')
 ```
 
-![4](C:\Users\honey\Desktop\readme\4.png)
+![4](readme\4.png)
 
 缩放并显示二值化的潜标掩码（64,64）。
 
@@ -370,7 +370,7 @@ scaled_mask = cv2.resize((mario_mask>=0.5).float().cpu().numpy(),(64,64),interpo
 plt.imshow(scaled_mask,cmap='gray')
 ```
 
-![5](C:\Users\honey\Desktop\readme\5.png)
+![5](readme\5.png)
 
 用瓦里奥取代马里奥
 从提示中画出带有掩码生成的变体
@@ -387,7 +387,7 @@ plt.imshow(diffedit_variant(mario_en,'Mario','Wario',seed=seed))
 plt.show()
 ```
 
-![6](C:\Users\honey\Desktop\readme\6.png)
+![6](readme\6.png)
 
 用斑马代替马
 从提示中画出带有掩码生成的变体
@@ -402,9 +402,9 @@ plt.imshow(diffedit_variant(horse_en,'a horse image','a zebra image',seed=seed))
 plt.show()
 ```
 
-![7](C:\Users\honey\Desktop\readme\7.png)
+![7](readme\7.png)
 
-![8](C:\Users\honey\Desktop\readme\8.png)
+![8](readme\8.png)
 
 \##用 "长颈鹿 "替换 "马"。
 从提示中画出带有掩码生成的变体
@@ -414,7 +414,7 @@ seed = 5327248292640123939
 diffedit_variant(horse_en,'a horse image','a giraffe image',seed=seed)
 ```
 
-![9](C:\Users\honey\Desktop\readme\9.png)
+![9](readme\9.png)
 
 用苹果代替草莓
 
@@ -430,6 +430,6 @@ plt.imshow(diffedit_variant(berry_en,'strawberries','apples',seed=seed))
 plt.show()
 ```
 
-![10](C:\Users\honey\Desktop\readme\10.png)
+![10](readme\10.png)
 
-![11](C:\Users\honey\Desktop\readme\11.png)
+![11](readme\11.png)
