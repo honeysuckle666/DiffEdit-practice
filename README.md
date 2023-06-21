@@ -95,7 +95,7 @@ _s = lambda x: (x.shape,x.max(),x.min())
 
 但是这种方式可能会需要多次运行才能下载且连接不稳定模型较大
 
-![](readme\1.png)
+![]([readme\1.pn](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/1.png)
 
 
 
@@ -137,7 +137,8 @@ vae_magic = 0.18215 # 用比例项训练的vae模型，更接近单位方差
 
 
 ## 在潜标和图像之间进行转换的函数
-
+![a](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/a.png)
+![b](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/b.png)
 ```
 def image2latent(im):
     im = tfms.ToTensor()(im).unsqueeze(0)
@@ -274,7 +275,11 @@ def image2latentmask(im):
 ## DiffEdit掩码生成的变化
 
 这种DiffEdit掩蔽方法的变种不是采取参考提示和目标提示，而是采取单一的提示，然后使用同一提示的正向和 "负向指导刻度 "来创建一个对比性/负向的噪声预测。
+Step1 计算图像编辑 mask  当对图像去噪时，在不同的文本条件下，扩散模型将产生不同的噪声估计值。我们可以根据估计值的不同之处，得出哪些图像区域与条件文本变化有关的信息。因此，噪声估计值之间的差异可以用来推断出一个 mask，以确定图像上哪些部分需要改变以达到文本要求。去除噪声预测中的极值，并通过对一组噪声的空间差异进行平均来稳定效果，然后将结果重新缩放到[0, 1]的范围内，并用一个阈值进行二进制化，就得到了图像编辑 mask。
 
+Step2 DDIM 编码  使用 DDIM 编码 Er 对输入图像 xo 在时间步 r 上编码。这是在无条件模型下进行的，即使用条件文本为ɵ，在这一步没有使用文本输入。此步骤的中间结果 xt  将在 Step3 中用到。
+
+Step3 基于 mask 的解码  首先，使用目标文本引导的扩散模型做采样得到 yt，并用 mask 来引导扩散过程。对于在 maskM 外的图像部分，编辑后原则上应与输入图像相同，所以通过用 DDIM 编码推断出的中间结果 xt 替换 M 外的像素值来指导扩散模型，这将通过解码自然地映射回原始像素。
 ```
 # 一个来自diffedit论文的变体
 # 用一个提示生成一个掩码
@@ -341,7 +346,7 @@ def diffedit_variant(im_encoded,from_prompt,to_prompt,seed=None):
 img = Image.open('./images/mario_scaled.jpg').resize((512,512));img
 ```
 
-![](readme\2.png)
+![][(readme\2.png)](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/2.png)
 
 ```
 encoded = image2latent(img); encoded.shape
@@ -352,7 +357,7 @@ mario_mask = generate_mask_variant(encoded,'Mario')
 plt.imshow(mario_mask.cpu().numpy(),cmap='gray')
 ```
 
-生成灰度图像![](read\3.png)
+生成灰度图像![](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/3.png)
 
 显示二值化的图像比例掩码（512,512）。
 
@@ -361,7 +366,7 @@ plt.imshow(mario_mask.cpu().numpy(),cmap='gray')
 plt.imshow((mario_mask>0.5).float().cpu().numpy(),cmap='gray')
 ```
 
-![4](readme\4.png)
+![4](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/4.png)
 
 缩放并显示二值化的潜标掩码（64,64）。
 
@@ -370,7 +375,7 @@ scaled_mask = cv2.resize((mario_mask>=0.5).float().cpu().numpy(),(64,64),interpo
 plt.imshow(scaled_mask,cmap='gray')
 ```
 
-![5](readme\5.png)
+![5](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/5.png)
 
 用瓦里奥取代马里奥
 从提示中画出带有掩码生成的变体
@@ -387,7 +392,7 @@ plt.imshow(diffedit_variant(mario_en,'Mario','Wario',seed=seed))
 plt.show()
 ```
 
-![6](readme\6.png)
+![6](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/6.png)
 
 用斑马代替马
 从提示中画出带有掩码生成的变体
@@ -402,9 +407,9 @@ plt.imshow(diffedit_variant(horse_en,'a horse image','a zebra image',seed=seed))
 plt.show()
 ```
 
-![7](readme\7.png)
+![7](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/7.png)
 
-![8](readme\8.png)
+![8](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/8.png)
 
 \##用 "长颈鹿 "替换 "马"。
 从提示中画出带有掩码生成的变体
@@ -414,7 +419,7 @@ seed = 5327248292640123939
 diffedit_variant(horse_en,'a horse image','a giraffe image',seed=seed)
 ```
 
-![9](readme\9.png)
+![9](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/9.png)
 
 用苹果代替草莓
 
@@ -430,6 +435,6 @@ plt.imshow(diffedit_variant(berry_en,'strawberries','apples',seed=seed))
 plt.show()
 ```
 
-![10](readme\10.png)
+![10](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/10.png)
 
-![11](readme\11.png)
+![11](https://github.com/honeysuckle666/DiffEdit-practice/blob/main/readme/11.png)
